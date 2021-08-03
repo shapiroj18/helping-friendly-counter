@@ -28,19 +28,15 @@ function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
 	console.log('Lines selected: ', lines_selected)
 	console.log('Lines avg and sum', lines_avg, lines_sum);
 	if (lines_selected > 1 && lines_sum > 0) {
-		console.log('all')
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }   Avg: ${ lines_avg }   Sum: ${ lines_sum }`
 		statusBarItem.show();
 	} else if (lines_selected > 1) {
-		console.log('just lines')
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }`
 		statusBarItem.show();
 	} else if (lines_sum > 0) {
-		console.log('just avg/sum')
 		statusBarItem.text = `Avg: ${ lines_avg }   Sum: ${ lines_sum }`
 		statusBarItem.show();
 	} else {
-		console.log('else')
 		statusBarItem.hide();
 	}
 }
@@ -64,22 +60,29 @@ function getLine(line_info: any) {
 function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 	let sum = 0;
 	let avg = 0;
+	let number_vals: number[] = [0, 0];
 	if (editor) {
-		let number_vals: number[] = [];
 		const document = editor.document;
 		const selection = editor.selection;
 		const text = document.getText(selection);
-		const selection_values = text.replace(/\n/g, " ").split(' ');
-		selection_values.forEach(function (value) {
-			if (Number(value)) {
-				number_vals.push(Number(value));
-			}
-		});
-		console.log(number_vals)
-		avg = selectionAvg(number_vals);
-		sum = selectionSum(number_vals);
+		const regex = /\b(([\d]+(?=[A-Za-z])\w+)|[A-Za-z]+(?=\d)\w+)\b/;
+		if (regex.exec(text)) {
+			console.log('Text found with values of digits and letters combined')
+			number_vals = [0, 0];
+		} else {
+			const selection_values = text.replace(/\n/g, " ").split(' ');
+			selection_values.forEach(function (value) {
+				if (Number(value)) {
+					number_vals.push(Number(value));
+				};
+			});
+			console.log(number_vals)
+			avg = selectionAvg(number_vals);
+			sum = selectionSum(number_vals);
+			number_vals = [avg, sum];
+		};
 	};
-	return [avg, sum];
+	return number_vals;
 }
 
 function selectionAvg(selection_sum: number[]): number {
