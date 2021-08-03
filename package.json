@@ -10,14 +10,14 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:line-counter.helloWorld"
+        "onCommand:line-counter.linecounter"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "line-counter.helloWorld",
-				"title": "Hello World"
+				"command": "line-counter.linecounter",
+				"title": "Line Counter"
 			}
 		]
 	},
