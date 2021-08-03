@@ -22,13 +22,13 @@ function updateStatusBarItem(statusBarItem: vscode.StatusBarItem, statusBarColor
 
 	const lines_selected = getNumberofLinesSelected(vscode.window.activeTextEditor);
 	const [lines_avg, lines_sum, lines_count] = getValsofSelection(vscode.window.activeTextEditor);
-	if (lines_selected > 1 && typeof lines_avg == 'number' && typeof lines_sum == 'number' && typeof lines_count == 'number') {
+	if (lines_selected > 1 && Number(lines_avg) && Number(lines_sum) && Number(lines_count)) {
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }   Avg: ${ lines_avg }   Sum: ${ lines_sum }   Count: ${ lines_count }`
 		statusBarItem.show();
 	} else if (lines_selected > 1) {
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }`
 		statusBarItem.show();
-	} else if (typeof lines_avg == 'number' && typeof lines_sum == 'number' && typeof lines_count == 'number') {
+	} else if (Number(lines_avg) && Number(lines_sum) && Number(lines_count)) {
 		statusBarItem.text = `Avg: ${ lines_avg }   Sum: ${ lines_sum }   Count: ${ lines_count }`
 		statusBarItem.show();
 	} else {
@@ -52,7 +52,7 @@ function getLine(line_info: any) {
 }
 
 function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
-	let number_vals: any = [];
+	let agg_vals: any = [];
 	if (editor) {
 		const document = editor.document;
 		const selection = editor.selection;
@@ -62,7 +62,8 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 		if (regex.exec(text)) {
 			console.log('Text found with values of digits and letters combined');
 		} else {
-			const selection_values = text.replace(/\n/g, " ").split(' ');
+			const selection_values = text.replace(/\n/g, ' ').replace(/"|'|,/g, ' ').split(' ');
+			let number_vals: number[] = [];
 			selection_values.forEach(function (value) {
 				if (Number(value)) {
 					number_vals.push(Number(value));
@@ -71,10 +72,10 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 			const avg = selectionAvg(number_vals);
 			const sum = selectionSum(number_vals);
 			const count = selectionCount(number_vals);
-			number_vals = [avg, sum, count];
+			agg_vals = [avg, sum, count];
 		};
 	};
-	return number_vals;
+	return agg_vals;
 }
 
 function selectionAvg(selection: number[]): number {
@@ -85,7 +86,7 @@ function selectionAvg(selection: number[]): number {
 
 function selectionSum(selection: number[]): number {
 	const sum = selection.reduce((a, b) => a + b, 0);
-	return sum;
+	return Number(sum.toFixed(2));
 }
 
 function selectionCount(selection: number[]): number {
