@@ -5,18 +5,19 @@ import * as vscode from 'vscode';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('line-counter.linecounter', () => {
 
-		const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
-		updateStatusBarItem(statusBarItem)
+	const statusBarCount = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
+	// create line counter if lines selected on startup
+	updateStatusBarItem(statusBarCount);
 
+	vscode.window.onDidChangeTextEditorSelection((context) => {
+		updateStatusBarItem(statusBarCount);
 	});
 
-	context.subscriptions.push(disposable);
+	vscode.window.onDidChangeActiveTextEditor((context) => {
+		updateStatusBarItem(statusBarCount);
+	});
+
 }
 
 function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {

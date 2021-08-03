@@ -10,17 +10,10 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:line-counter.linecounter"
+        "*"
 	],
 	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "line-counter.linecounter",
-				"title": "Line Counter"
-			}
-		]
-	},
+
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
