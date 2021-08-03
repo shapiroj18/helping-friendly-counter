@@ -88,7 +88,7 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 function selectionAvg(selection: number[]): number {
 	const sum = selection.reduce((a, b) => a + b, 0);
 	const avg = sum / selection.length
-	return Math.round(avg);
+	return Number(avg.toFixed(2));
 }
 
 function selectionSum(selection: number[]): number {
