@@ -25,16 +25,22 @@ function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
 
 	const lines_selected = getNumberofLinesSelected(vscode.window.activeTextEditor);
 	const [lines_avg, lines_sum] = getValsofSelection(vscode.window.activeTextEditor);
+	console.log('Lines selected: ', lines_selected)
+	console.log('Lines avg and sum', lines_avg, lines_sum);
 	if (lines_selected > 1 && lines_sum > 0) {
+		console.log('all')
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }   Avg: ${ lines_avg }   Sum: ${ lines_sum }`
 		statusBarItem.show();
 	} else if (lines_selected > 1) {
+		console.log('just lines')
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }`
 		statusBarItem.show();
 	} else if (lines_sum > 0) {
+		console.log('just avg/sum')
 		statusBarItem.text = `Avg: ${ lines_avg }   Sum: ${ lines_sum }`
 		statusBarItem.show();
 	} else {
+		console.log('else')
 		statusBarItem.hide();
 	}
 }
@@ -63,15 +69,15 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 		const document = editor.document;
 		const selection = editor.selection;
 		const text = document.getText(selection);
-		const selection_values = text.split(' ');
+		const selection_values = text.replace(/\n/g, " ").split(' ');
 		selection_values.forEach(function (value) {
 			if (Number(value)) {
 				number_vals.push(Number(value));
 			}
+		});
 		console.log(number_vals)
 		avg = selectionAvg(number_vals);
 		sum = selectionSum(number_vals);
-		});
 	};
 	return [avg, sum];
 }
@@ -79,7 +85,7 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 function selectionAvg(selection_sum: number[]): number {
 	const sum = selection_sum.reduce((a, b) => a + b, 0);
 	const avg = sum / selection_sum.length
-	return avg;
+	return Math.round(avg);
 }
 
 function selectionSum(selection_sum: number[]): number {
