@@ -1,8 +1,14 @@
 {
-  "name": "line-counter",
-	"displayName": "line-counter",
+  "name": "helping-friendly-counter",
+	"displayName": "Helping Friendly Counter",
 	"description": "Easily count lines as well as sum/average/count values when you highlight them",
 	"version": "0.0.1",
+	"publisher": "jonathan-shapiro-93",
+	"repository": {
+		"type": "git",
+		"url": "https://https://github.com/shapiroj18/line-counter.git"
+	},
+	"icon": "images/bird.png",
 	"engines": {
 		"vscode": "^1.58.0"
 	},

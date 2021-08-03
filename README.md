@@ -2,7 +2,9 @@
 
 ## Features
 
-Counts the lines of your selected text, calculates average, sum and count of numbers within the text. 
+VSCode Extension that adds a status bar item detailing:
+* Count of the selected lines of text
+* Calculates Average, Sum and Count of numbers within the text
 
 For example if there is an image subfolder under your extension project workspace:
 
