@@ -48,7 +48,6 @@ function getNumberofLinesSelected(editor: vscode.TextEditor | undefined): number
 		const start_info = selection.start;
 		const end_info = selection.end;
 		lines = getLine(end_info) - getLine(start_info) + 1;
-		// lines = editor.selections.reduce((prev, curr) => prev + (curr.end.line - curr.start.line + 1), 0);
 	}
 	return lines;
 }
@@ -65,10 +64,10 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 		const document = editor.document;
 		const selection = editor.selection;
 		const text = document.getText(selection);
+		// regex matches any word that has digits and letters next to it - i.e. "te5t", "4our", "hell0"
 		const regex = /\b(([\d]+(?=[A-Za-z])\w+)|[A-Za-z]+(?=\d)\w+)\b/;
 		if (regex.exec(text)) {
-			console.log('Text found with values of digits and letters combined')
-			number_vals = [0, 0];
+			console.log('Text found with values of digits and letters combined');
 		} else {
 			const selection_values = text.replace(/\n/g, " ").split(' ');
 			selection_values.forEach(function (value) {
@@ -97,5 +96,4 @@ function selectionSum(selection_sum: number[]): number {
 }
 
 
-// this method is called when your extension is deactivated
 export function deactivate() {}
