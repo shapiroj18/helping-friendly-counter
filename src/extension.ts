@@ -25,7 +25,7 @@ function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
 
 	const lines_selected = getNumberofLinesSelected(vscode.window.activeTextEditor);
 	const [lines_avg, lines_sum, lines_count] = getValsofSelection(vscode.window.activeTextEditor);
-	if (lines_selected > 1 && lines_avg && lines_sum && lines_count) {
+	if (lines_selected > 1 && typeof lines_avg == 'number' && typeof lines_sum == 'number' && typeof lines_count == 'number') {
 		console.log('all')
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }   Avg: ${ lines_avg }   Sum: ${ lines_sum }   Count: ${ lines_count }`
 		statusBarItem.show();
@@ -33,7 +33,7 @@ function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
 		console.log('lines')
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }`
 		statusBarItem.show();
-	} else if (lines_avg && lines_sum && lines_count) {
+	} else if (typeof lines_avg == 'number' && typeof lines_sum == 'number' && typeof lines_count == 'number') {
 		console.log('vals')
 		statusBarItem.text = `Avg: ${ lines_avg }   Sum: ${ lines_sum }   Count: ${ lines_count }`
 		statusBarItem.show();
