@@ -24,19 +24,21 @@ function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
 	statusBarItem.color = '#2CC8A5';
 
 	const lines_selected = getNumberofLinesSelected(vscode.window.activeTextEditor);
-	const [lines_avg, lines_sum] = getValsofSelection(vscode.window.activeTextEditor);
-	console.log('Lines selected: ', lines_selected)
-	console.log('Lines avg and sum', lines_avg, lines_sum);
-	if (lines_selected > 1 && lines_sum > 0) {
-		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }   Avg: ${ lines_avg }   Sum: ${ lines_sum }`
+	const [lines_avg, lines_sum, lines_count] = getValsofSelection(vscode.window.activeTextEditor);
+	if (lines_selected > 1 && lines_avg && lines_sum && lines_count) {
+		console.log('all')
+		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }   Avg: ${ lines_avg }   Sum: ${ lines_sum }   Count: ${ lines_count }`
 		statusBarItem.show();
 	} else if (lines_selected > 1) {
+		console.log('lines')
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }`
 		statusBarItem.show();
-	} else if (lines_sum > 0) {
-		statusBarItem.text = `Avg: ${ lines_avg }   Sum: ${ lines_sum }`
+	} else if (lines_avg && lines_sum && lines_count) {
+		console.log('vals')
+		statusBarItem.text = `Avg: ${ lines_avg }   Sum: ${ lines_sum }   Count: ${ lines_count }`
 		statusBarItem.show();
 	} else {
+		console.log('else')
 		statusBarItem.hide();
 	}
 }
@@ -57,9 +59,7 @@ function getLine(line_info: any) {
 }
 
 function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
-	let sum = 0;
-	let avg = 0;
-	let number_vals: number[] = [0, 0];
+	let number_vals: any = [];
 	if (editor) {
 		const document = editor.document;
 		const selection = editor.selection;
@@ -76,23 +76,29 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 				};
 			});
 			console.log(number_vals)
-			avg = selectionAvg(number_vals);
-			sum = selectionSum(number_vals);
-			number_vals = [avg, sum];
+			const avg = selectionAvg(number_vals);
+			const sum = selectionSum(number_vals);
+			const count = selectionCount(number_vals);
+			number_vals = [avg, sum, count];
 		};
 	};
 	return number_vals;
 }
 
-function selectionAvg(selection_sum: number[]): number {
-	const sum = selection_sum.reduce((a, b) => a + b, 0);
-	const avg = sum / selection_sum.length
+function selectionAvg(selection: number[]): number {
+	const sum = selection.reduce((a, b) => a + b, 0);
+	const avg = sum / selection.length
 	return Math.round(avg);
 }
 
-function selectionSum(selection_sum: number[]): number {
-	const sum = selection_sum.reduce((a, b) => a + b, 0);
+function selectionSum(selection: number[]): number {
+	const sum = selection.reduce((a, b) => a + b, 0);
 	return sum;
+}
+
+function selectionCount(selection: number[]): number {
+	const count = selection.length;
+	return count
 }
 
 
