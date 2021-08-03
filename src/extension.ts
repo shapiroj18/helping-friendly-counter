@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
 	const n = getNumberofLinesSelected(vscode.window.activeTextEditor);
-	if (n > 0) {
+	if (n > 1) {
 		statusBarItem.text = lineText(n)
 		statusBarItem.color = '#2CC8A5';
 		statusBarItem.show();
@@ -50,7 +50,8 @@ function getNumberofLinesSelected(editor: vscode.TextEditor | undefined): number
 	return lines;
 }
 
-function getSumofSelection(editor: vscode.TextEditor | undefined): void {
+function getSumofSelection(editor: vscode.TextEditor | undefined): number {
+	let sum = 0;
 	if (editor) {
 		let number_vals: number[] = [];
 		const document = editor.document;
@@ -61,14 +62,14 @@ function getSumofSelection(editor: vscode.TextEditor | undefined): void {
 			if (Number(value)) {
 				number_vals.push(Number(value));
 			}
-		console.log(selectionSum(number_vals));
+		sum = selectionSum(number_vals);
 		});
 	};
-	// return sum;
+	return sum;
 }
 
 function selectionSum(selection_sum: number[]): number {
-	var sum = selection_sum.reduce(function(a, b){ return a + b; }); 
+	const sum = selection_sum.reduce((a, b) => a + b, 0);
 	return sum;
 }
 
