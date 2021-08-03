@@ -21,15 +21,18 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
+	statusBarItem.color = '#2CC8A5';
+
 	const lines_selected = getNumberofLinesSelected(vscode.window.activeTextEditor);
-	const lines_sum = getSumofSelection(vscode.window.activeTextEditor);
+	const [lines_avg, lines_sum] = getValsofSelection(vscode.window.activeTextEditor);
 	if (lines_selected > 1 && lines_sum > 0) {
-		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }   Sum: ${ lines_sum }`
-		statusBarItem.color = '#2CC8A5';
+		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }   Avg: ${ lines_avg }   Sum: ${ lines_sum }`
 		statusBarItem.show();
 	} else if (lines_selected > 1) {
 		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }`
-		statusBarItem.color = '#2CC8A5';
+		statusBarItem.show();
+	} else if (lines_sum > 0) {
+		statusBarItem.text = `Avg: ${ lines_avg }   Sum: ${ lines_sum }`
 		statusBarItem.show();
 	} else {
 		statusBarItem.hide();
@@ -52,22 +55,31 @@ function getLine(line_info: any) {
 	return line_info._line
 }
 
-function getSumofSelection(editor: vscode.TextEditor | undefined): number {
+function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 	let sum = 0;
+	let avg = 0;
 	if (editor) {
 		let number_vals: number[] = [];
 		const document = editor.document;
 		const selection = editor.selection;
 		const text = document.getText(selection);
-		const selection_values = text.split('');
+		const selection_values = text.split(' ');
 		selection_values.forEach(function (value) {
 			if (Number(value)) {
 				number_vals.push(Number(value));
 			}
+		console.log(number_vals)
+		avg = selectionAvg(number_vals);
 		sum = selectionSum(number_vals);
 		});
 	};
-	return sum;
+	return [avg, sum];
+}
+
+function selectionAvg(selection_sum: number[]): number {
+	const sum = selection_sum.reduce((a, b) => a + b, 0);
+	const avg = sum / selection_sum.length
+	return avg;
 }
 
 function selectionSum(selection_sum: number[]): number {
