@@ -10,8 +10,6 @@ export function activate(context: vscode.ExtensionContext) {
 	// create line counter on startup
 	updateStatusBarItem(statusBarCount);
 
-	getSumofSelection(vscode.window.activeTextEditor)
-
 	vscode.window.onDidChangeTextEditorSelection((context) => {
 		updateStatusBarItem(statusBarCount);
 	});
@@ -23,9 +21,14 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
-	const n = getNumberofLinesSelected(vscode.window.activeTextEditor);
-	if (n > 1) {
-		statusBarItem.text = lineText(n)
+	const lines_selected = getNumberofLinesSelected(vscode.window.activeTextEditor);
+	const lines_sum = getSumofSelection(vscode.window.activeTextEditor);
+	if (lines_selected > 1 && lines_sum > 0) {
+		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }   Sum: ${ lines_sum }`
+		statusBarItem.color = '#2CC8A5';
+		statusBarItem.show();
+	} else if (lines_selected > 1) {
+		statusBarItem.text = `$(pulse) Lines: ${ lines_selected }`
 		statusBarItem.color = '#2CC8A5';
 		statusBarItem.show();
 	} else {
@@ -33,21 +36,20 @@ function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
 	}
 }
 
-function lineText(selected_lines_value: number): string {
-	if (selected_lines_value == 1) {
-		var text = `$(pulse) ${ selected_lines_value } line selected`;
-	} else {
-		var text = `$(pulse) ${ selected_lines_value } lines selected`;
-	}
-	return text;
-}
-
 function getNumberofLinesSelected(editor: vscode.TextEditor | undefined): number {
 	let lines = 0;
 	if (editor) {
-		lines = editor.selections.reduce((prev, curr) => prev + (curr.end.line - curr.start.line + 1), 0);
+		const selection = editor.selection;
+		const start_info = selection.start;
+		const end_info = selection.end;
+		lines = getLine(end_info) - getLine(start_info) + 1;
+		// lines = editor.selections.reduce((prev, curr) => prev + (curr.end.line - curr.start.line + 1), 0);
 	}
 	return lines;
+}
+
+function getLine(line_info: any) {
+	return line_info._line
 }
 
 function getSumofSelection(editor: vscode.TextEditor | undefined): number {
