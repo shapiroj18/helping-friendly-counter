@@ -5,8 +5,7 @@ VSCode Extension that adds a status bar item detailing:
 * Count of the selected lines of text
 * Calculates Average, Sum and Count of numbers within the text
 
-For example if there is an image subfolder under your extension project workspace:
-
+### Demonstration
 ![main features](images/linecounter.gif)
 [Recorded using LICEcap](https://www.cockos.com/licecap/)
 
@@ -17,8 +16,7 @@ Feel free to [submit issues](https://github.com/shapiroj18/helping-friendly-coun
 
 ## Known Issues
 * Certain numbers will not work with summations:
-  * `-3-4` will only read as `-3` or `-4` depending on which was highlighted first
-
+  * Highlighting text such as `-3-4` reads as an invalid number unless `-3` or `-4` is just highlighted and therefore just shows line count
 
 ## Notes
 * The name of this extension is an homage to the band [Phish](https://phish.net/) and their Helping Friendly Book.

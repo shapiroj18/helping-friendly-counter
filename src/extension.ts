@@ -77,13 +77,17 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 		if (regex.exec(text)) {
 			console.log('Text found with values of digits and letters combined');
 		} else {
-			const selection_values = text.replace(/\n/g, ' ').replace(/"|'|,|(|)|{|}|[|]/g, ' ').split(' ');
+			// regex used follows first pattern of top answer https://stackoverflow.com/questions/9705194/replace-special-characters-in-a-string-with-underscore/9705227
+			// can't just include the second answer (string = string.replace(/[^a-zA-Z0-9]/g,'_');) since special characters such as "." and "-" matter for numbers
+			const selection_values = text.replace(/\n/g, ' ').replace(/[&\/\\#\[\],+()$~%'"`:*?<>{}]/g, '').split(' ');
+			console.log(selection_values)
 			let number_vals: number[] = [];
 			selection_values.forEach(function (value) {
 				if (Number(value)) {
 					number_vals.push(Number(value));
 				};
 			});
+			console.log(number_vals)
 			const avg = selectionAvg(number_vals);
 			const sum = selectionSum(number_vals);
 			const count = selectionCount(number_vals);
