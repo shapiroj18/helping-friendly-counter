@@ -2,7 +2,7 @@
 
 ## Features
 VSCode Extension that adds a status bar item detailing:
-* Count of the selected lines of text
+* Count the selected lines of text
 * Calculates Average, Sum and Count of numbers within the text
 
 ### Demonstration
