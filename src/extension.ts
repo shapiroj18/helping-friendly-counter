@@ -3,22 +3,37 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
 
 	const statusBarCount = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
-	const statusBarColor = '#2CC8A5'
+	// set default status bar color
+	let statusBarColor = '#2CC8A5'
 	// create line counter on startup
-	updateStatusBarItem(statusBarCount, statusBarColor);
+	updateStatusBarItem(statusBarCount);
+	updateStatusBarColor(statusBarCount, statusBarColor);
+
+	const counterColor = vscode.commands.registerCommand('extension.counterColor', async () => {
+
+		let input_color = await vscode.window.showInputBox({ placeHolder: 'Hex Color (i.e. #2CC8A5)' });
+  		if (input_color) {
+			updateStatusBarColor(statusBarCount, input_color)
+		}
+	});
+
+	context.subscriptions.push(counterColor);
 
 	vscode.window.onDidChangeTextEditorSelection((context) => {
-		updateStatusBarItem(statusBarCount, statusBarColor);
+		updateStatusBarItem(statusBarCount);
 	});
 
 	vscode.window.onDidChangeActiveTextEditor((context) => {
-		updateStatusBarItem(statusBarCount, statusBarColor);
+		updateStatusBarItem(statusBarCount);
 	});
 
 }
 
-function updateStatusBarItem(statusBarItem: vscode.StatusBarItem, statusBarColor: string): void {
+function updateStatusBarColor(statusBarItem: vscode.StatusBarItem, statusBarColor: string): void {
 	statusBarItem.color = statusBarColor;
+}
+
+function updateStatusBarItem(statusBarItem: vscode.StatusBarItem): void {
 
 	const lines_selected = getNumberofLinesSelected(vscode.window.activeTextEditor);
 	const [lines_avg, lines_sum, lines_count] = getValsofSelection(vscode.window.activeTextEditor);
@@ -62,7 +77,7 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 		if (regex.exec(text)) {
 			console.log('Text found with values of digits and letters combined');
 		} else {
-			const selection_values = text.replace(/\n/g, ' ').replace(/"|'|,/g, ' ').split(' ');
+			const selection_values = text.replace(/\n/g, ' ').replace(/"|'|,|(|)|{|}|[|]/g, ' ').split(' ');
 			let number_vals: number[] = [];
 			selection_values.forEach(function (value) {
 				if (Number(value)) {
@@ -95,4 +110,6 @@ function selectionCount(selection: number[]): number {
 }
 
 
-export function deactivate() {}
+export function deactivate() {
+
+}

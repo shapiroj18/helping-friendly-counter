@@ -16,10 +16,18 @@
 		"Other"
 	],
 	"activationEvents": [
-        "*"
+        "onStartupFinished",
+		"onCommand:extension.counterColor"
 	],
 	"main": "./out/extension.js",
-
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.counterColor",
+				"title": "Friendly Color"
+			}
+		]
+	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
