@@ -26,7 +26,17 @@
         "command": "extension.counterColor",
         "title": "Friendly Color"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Helping Friendly Counter",
+      "properties": {
+        "helping-friendly-counter.Color": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Specifies the color of the counter."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

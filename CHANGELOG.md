@@ -2,6 +2,10 @@
 
 All notable changes to the "Helping Friendly Counter" extension will be documented in this file.
 
+## [1.1.0] - 2021-08-04
+## Added
+- Created functionality to updated color of extension permanently in Code > Preferences > Settings > Extensions > Helping Friendly Counter
+
 ## [1.0.1] - 2021-08-03
 ### Changed
 - README updates for clarity

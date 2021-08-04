@@ -4,7 +4,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const statusBarCount = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
 	// set default status bar color
-	let statusBarColor = '#2CC8A5'
+	let statusBarColor: any = vscode.workspace.getConfiguration('helping-friendly-counter').get('Color')
 	// create line counter on startup
 	updateStatusBarItem(statusBarCount);
 	updateStatusBarColor(statusBarCount, statusBarColor);
@@ -80,14 +80,12 @@ function getValsofSelection(editor: vscode.TextEditor | undefined): number[] {
 			// regex used follows first pattern of top answer https://stackoverflow.com/questions/9705194/replace-special-characters-in-a-string-with-underscore/9705227
 			// can't just include the second answer (string = string.replace(/[^a-zA-Z0-9]/g,'_');) since special characters such as "." and "-" matter for numbers
 			const selection_values = text.replace(/\n/g, ' ').replace(/[&\/\\#\[\],+()$~%'"`:*?<>{}]/g, '').split(' ');
-			console.log(selection_values)
 			let number_vals: number[] = [];
 			selection_values.forEach(function (value) {
 				if (Number(value)) {
 					number_vals.push(Number(value));
 				};
 			});
-			console.log(number_vals)
 			const avg = selectionAvg(number_vals);
 			const sum = selectionSum(number_vals);
 			const count = selectionCount(number_vals);
