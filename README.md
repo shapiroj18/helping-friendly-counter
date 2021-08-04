@@ -7,7 +7,7 @@ VSCode Extension that adds a status bar item detailing:
 
 ### Demonstration
 ![main features](images/linecounter.gif)
-[Recorded using LICEcap](https://www.cockos.com/licecap/) / ASCII Art by [asciiart.eu](https://www.asciiart.eu/plants/other)
+Recorded using [LICEcap](https://www.cockos.com/licecap/) / ASCII Art by [asciiart.eu](https://www.asciiart.eu/plants/other)
 
 Feel free to [submit issues](https://github.com/shapiroj18/helping-friendly-counter/issues) or [additional features](https://github.com/shapiroj18/helping-friendly-counter/pulls)
 
